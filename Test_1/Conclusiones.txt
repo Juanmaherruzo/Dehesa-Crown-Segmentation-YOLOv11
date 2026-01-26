@@ -1,0 +1,18 @@
+Dimensions: 4068x2481 px | GSD: 25.00 cm/px
+Total Area: 63.0794 ha
+Processing windows: 960x960 px...
+
+=============================================
+          FOREST INVENTORY STATISTICS
+=============================================
+  > Study Area:               63 ha
+  > Detected Trees:           2,250 stems
+  > Density:                  35.8 stems/ha
+  > Canopy Cover (CC):        17 %
+---------------------------------------------
+  > Mean Crown Diameter:      7.62 m
+  > Std Deviation (Diam):     1.73 m
+  > Min Diameter:             3.08 m
+  > Max Diameter:             14.07 m
+  > Median Diameter:          7.54 m
+=============================================

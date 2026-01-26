@@ -1,0 +1,15 @@
+# --- Core AI & Computer Vision ---
+ultralytics>=8.3.0
+numpy>=1.24.0
+
+# --- Geospatial & GIS ---
+rasterio>=1.3.0
+geopandas>=0.14.0
+shapely>=2.0.0
+
+# --- Data Handling ---
+pandas>=2.0.0
+
+# --- Optional but recommended for Notebooks ---
+ipykernel
+matplotlib
