@@ -1,15 +1,49 @@
-# --- Core AI & Computer Vision ---
-ultralytics>=8.3.0
+# =============================================================================
+# Forestry Remote Sensing & AI Pipeline — Requirements
+# Scripts 16-25: SfM, 2D/3D Filtering, Normalization, Clustering,
+#                ITC Segmentation, Dasometric Extraction, Random Forest,
+#                Crown Detection (YOLOv11)
+# =============================================================================
+# Install all:
+#   pip install -r requirements.txt
+#
+# PyTorch must be installed separately to match your CUDA version:
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+#   (replace cu126 with cu118, cu121, or cpu depending on your system)
+# =============================================================================
+
+# --- Core Scientific Stack ---
 numpy>=1.24.0
+pandas>=2.0.0
+scipy>=1.11.0
+
+# --- AI & Computer Vision ---
+ultralytics>=8.4.34             # YOLOv11 — crown detection (Script 25)
+opencv-python>=4.8.0            # Frame extraction from video (Script 16)
+# torch / torchvision / torchaudio: install separately (see header)
+
+# --- Machine Learning ---
+scikit-learn>=1.4.0             # RF, HDBSCAN, StandardScaler, cross-validation
+joblib>=1.3.0                   # Parallel processing, model persistence
 
 # --- Geospatial & GIS ---
-rasterio>=1.3.0
-geopandas>=0.14.0
-shapely>=2.0.0
+rasterio>=1.3.0                 # Raster I/O, windowed reading, affine transforms
+geopandas>=0.14.0               # Vector GIS, GeoDataFrame, spatial join NMS
+shapely>=2.0.0                  # Polygon geometry, ConvexHull wrappers
 
-# --- Data Handling ---
-pandas>=2.0.0
+# --- 3D Point Cloud ---
+laspy>=2.4.0                    # LAZ/LAS read/write (Scripts 20, 22, 23)
+open3d>=0.18.0                  # SOR/ROR filtering, 3D visualization
 
-# --- Optional but recommended for Notebooks ---
+# --- SfM Reconstruction ---
+pycolmap>=0.6.0                 # SIFT extraction, sequential matching, incremental mapping (Script 16)
+pillow>=10.0.0                  # Image I/O, HEIC conversion bridge
+pillow-heif>=0.16.0             # HEIC/HEIF format support (Script 16)
+
+# --- Visualization ---
+matplotlib>=3.7.0               # Plots, learning curves, feature importance
+seaborn>=0.13.0                 # Confusion matrix heatmaps (Script 24)
+
+# --- Notebook Support ---
 ipykernel
-matplotlib
+jupyterlab>=4.0.0
