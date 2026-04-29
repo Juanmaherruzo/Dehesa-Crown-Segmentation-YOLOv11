@@ -11,9 +11,6 @@
 # Training dataset (available on Roboflow — see README)
 Detector_Copas_yaml/
 
-# Claude Code internal files
-.claude/
-
 # Python
 __pycache__/
 *.pyc
