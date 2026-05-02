@@ -54,7 +54,7 @@ Orthophoto (.tif)
 
 **1. Clone**
 ```bash
-git clone https://github.com/Juanmaherruzo/Dehesa-Tree-Crown-Segmentation-YOLOv11.git
+git clone https://github.com/Juanmaherruzo/Dehesa-Crown-Segmentation-YOLOv11.git
 cd Dehesa-Tree-Crown-Segmentation-YOLOv11
 ```
 
