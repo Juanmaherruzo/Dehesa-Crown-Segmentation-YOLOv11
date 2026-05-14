@@ -3,7 +3,7 @@
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-brightgreen)
 ![YOLOv11](https://img.shields.io/badge/YOLOv11-Ultralytics%208.4%2B-FF5A00)
-[![Dataset](https://img.shields.io/badge/Dataset-Roboflow-8E3CF7)](https://universe.roboflow.com/encinas/my-first-project-l5ltb/dataset/5)
+[![Dataset](https://img.shields.io/badge/Dataset-Annotation_station-8E3CF7)](https://github.com/Juanmaherruzo/annotation_station/tree/main)
 
 Instance segmentation of individual tree crowns in Mediterranean Dehesa ecosystems. Processes large aerial orthophotos tile-by-tile and exports georeferenced crown polygons to GeoPackage for direct use in QGIS or ArcGIS.
 
