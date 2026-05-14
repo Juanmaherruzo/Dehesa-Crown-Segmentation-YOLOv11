@@ -152,7 +152,7 @@ Validation predictions on held-out tiles:
 - **Single class** — Detects one class (`Copa`). Does not distinguish species, health status, or age class.
 - **Dense canopy** — Heavy crown overlap may produce merged or missed detections.
 - **Model scale** — Uses the `Nano` variant (`yolo11n-seg`) for speed. Larger YOLO variants are expected to improve recall in structurally complex scenes.
-- **Training data** — Built on a small labeled dataset ([Roboflow encinas v5](https://universe.roboflow.com/encinas/my-first-project-l5ltb/dataset/5), CC BY 4.0). Systematic generalisation testing beyond similar imagery has not been performed.
+- **Low accuracy** - Performance metrics fall significantly below the expected baseline for a segmentation project. To achieve improvements, greater volume and variance in the training data are required.
 
 ---
 
