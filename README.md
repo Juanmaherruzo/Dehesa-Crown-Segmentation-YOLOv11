@@ -167,8 +167,25 @@ Contributions are welcome. Areas of particular interest:
 Please open an issue or submit a pull request.
 
 ---
+## Citation
+	
+If you use this work in your research, please cite:
+
+@software{herruzo2026Dehesa-Crown-Segmentation-YOLOv11,
+author  = {Herruzo, Juan Manuel},
+title   = {Dehesa-Crown-Segmentation-YOLOv11},
+year    = {2026},
+url     = {[https://github.com/Juanmaherruzo/Dehesa-Crown-Segmentation-YOLOv11](https://github.com/Juanmaherruzo/Dehesa-Crown-Segmentation-YOLOv11)}
+}
+
+---
+
+## Contact
+**Juan Manuel Herruzo**  
+juanmherruzo@gmail.com
+
+---
 
 ## License
 
 Code: **MIT License** — see [LICENSE](LICENSE).  
-Training dataset: [Roboflow encinas v5](https://universe.roboflow.com/encinas/my-first-project-l5ltb/dataset/5) — CC BY 4.0.
