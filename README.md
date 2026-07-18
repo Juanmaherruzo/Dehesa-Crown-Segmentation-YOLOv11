@@ -1,6 +1,6 @@
 # Dehesa Tree Crown Segmentation (YOLOv11)
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-brightgreen)
 ![YOLOv11](https://img.shields.io/badge/YOLOv11-Ultralytics%208.4%2B-FF5A00)
 [![Dataset](https://img.shields.io/badge/Dataset-Annotation_station-8E3CF7)](https://github.com/Juanmaherruzo/annotation_station/tree/main)
@@ -66,34 +66,37 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 pip install torch torchvision torchaudio
 ```
 
-**3. Install remaining dependencies**
+**3. Install the package** (dependencies come from `pyproject.toml`)
 ```bash
-pip install -r requirements.txt
+pip install -e ".[dev]"
+# or, faster, with uv:
+uv venv && uv pip install -e ".[dev]"
 ```
 
 ---
 
 ## Usage
 
-Open `Crown_detector.ipynb` in Jupyter Lab, select the kernel that has PyTorch installed, and set the paths at the bottom of the code cell:
+Installing the package exposes two console commands:
 
-```python
-HERE        = Path(r"/path/to/your/project")
-IMAGE_PATH  = str(HERE / "orthophoto.tif")
-MODEL_PATH  = str(HERE / "models/Nano_3_960/weights/best.pt")
-OUTPUT_GPKG = str(HERE / "Forest_Inventory_Results.gpkg")
+```bash
+# Detect crowns in an orthophoto and export a GeoPackage
+crown-detect --image orthophoto.tif --model models/best.pt --output crowns.gpkg
+
+# Sample multispectral index values (NDVI, EVI, ...) at each crown centroid
+crown-indices --gpkg crowns.gpkg --index-dir ./indices
 ```
 
-Key parameters and their effect:
+Key `crown-detect` options and their effect:
 
-| Parameter | Default | Notes |
+| Flag | Default | Notes |
 | :--- | :---: | :--- |
-| `tile_size` | `960` | Must match model training image size |
-| `overlap` | `200` | Larger overlap → fewer missed edge crowns, more NMS work |
-| `conf_threshold` | `0.20` | Lower → more detections, more false positives |
-| `nms_iou_thresh` | `0.50` | IoU above this → duplicate, keep the larger polygon |
-| `min_diameter_m` | `3.0` | Hard filter: discard crowns narrower than this |
-| `n_workers` | `10` | Parallel threads; reduce if you run out of RAM |
+| `--tile-size` | `960` | Must match the model training image size |
+| `--overlap` | `200` | Larger overlap → fewer missed edge crowns, more NMS work |
+| `--conf` | `0.50` | Lower → more detections, more false positives |
+| `--nms-iou` | `0.40` | IoU above this → duplicate, keep the larger polygon |
+| `--min-diameter` | `3.0` | Hard filter: discard crowns narrower than this (m) |
+| `--workers` | `-1` | Parallel threads (`-1` = all cores); reduce if RAM-bound |
 
 ---
 
