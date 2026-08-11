@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import threading
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
 import pytest
 
@@ -27,8 +27,8 @@ from crown_detector.detector import CrownDetectionEngine
 class _FakeYOLO:
     """Stand-in for ultralytics.YOLO that records which thread built it."""
 
-    instances: list[_FakeYOLO] = []
-    lock = threading.Lock()
+    instances: ClassVar[list[_FakeYOLO]] = []
+    lock: ClassVar[threading.Lock] = threading.Lock()
 
     def __init__(self, path: str) -> None:
         self.path = path
