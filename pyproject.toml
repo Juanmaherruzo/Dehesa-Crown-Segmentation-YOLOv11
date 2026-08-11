@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dehesa-crown-segmentation"
-version = "0.1.0"
+version = "0.2.0"
 description = "Tree crown detection over orthophotos with a YOLOv11 segmentation model"
 authors = [{ name = "Juan Manuel Herruzo", email = "juanmherruzo@gmail.com" }]
 license = { text = "MIT" }
