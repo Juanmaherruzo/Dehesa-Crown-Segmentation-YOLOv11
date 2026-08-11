@@ -55,7 +55,7 @@ Orthophoto (.tif)
 **1. Clone**
 ```bash
 git clone https://github.com/Juanmaherruzo/Dehesa-Crown-Segmentation-YOLOv11.git
-cd Dehesa-Tree-Crown-Segmentation-YOLOv11
+cd Dehesa-Crown-Segmentation-YOLOv11
 ```
 
 **2. Install PyTorch** (match your CUDA version — check with `nvidia-smi`)
@@ -96,7 +96,21 @@ Key `crown-detect` options and their effect:
 | `--conf` | `0.50` | Lower → more detections, more false positives |
 | `--nms-iou` | `0.40` | IoU above this → duplicate, keep the larger polygon |
 | `--min-diameter` | `3.0` | Hard filter: discard crowns narrower than this (m) |
-| `--workers` | `-1` | Parallel threads (`-1` = all cores); reduce if RAM-bound |
+| `--workers` | `-1` | Parallel threads (`-1` = one per core, capped at 2 on CUDA) |
+
+These defaults are read from `CrownDetectionEngine`, so the library and the CLI
+cannot drift apart; a test asserts it.
+
+**On workers and VRAM.** Each worker thread builds its own YOLO predictor,
+because an Ultralytics model is not safe to call concurrently from several
+threads. On CUDA that means one copy of the weights per worker, so `-1` is
+capped at 2 to keep a 4 GB laptop GPU inside its budget. Raise it explicitly
+(`--workers 4`) if you have the memory.
+
+**On completeness.** A tile that fails is counted, logged at `WARNING`, and
+reported in the inventory summary as a coverage percentage; `crown-detect` exits
+non-zero if any tile was lost. A stem count from a run that dropped tiles is a
+lower bound, and the tool says so rather than reporting success.
 
 ---
 
@@ -119,19 +133,11 @@ The exported GeoPackage contains one polygon per detected crown:
 
 ## Results
 
-### Inventory — 14,506 ha study area · 25 cm/px GSD
+Two different things are reported below, and they should not be conflated: what
+the model *scores* against annotated ground truth, and what it *produced* when
+run over a large orthophoto. Only the first is a measure of accuracy.
 
-| Metric | Value |
-| :--- | :--- |
-| **Detected trees** | 357,185 |
-| **Tree density** | 24.62 stems/ha |
-| **Canopy Cover (FCC)** | 11.48 % |
-| **Mean crown diameter** | 7.35 m |
-| **Std dev (diameter)** | 2.30 m |
-| **Median crown diameter** | 7.16 m |
-| **Max crown diameter** | 18.88 m |
-
-### Model performance — 200 epochs · `yolo11n-seg` · 960 px
+### Model accuracy — validation split · 200 epochs · `yolo11n-seg` · 960 px
 
 ![Training curves](models/Nano_3_960/results.png)
 
@@ -142,9 +148,32 @@ The exported GeoPackage contains one polygon per detected crown:
 | **mAP@50** | 76.6 % | 75.5 % |
 | **mAP@50-95** | 51.6 % | 42.3 % |
 
-Validation predictions on held-out tiles:
+These are **validation-split figures** — the same split used to select the
+checkpoint — not an independent test set, so read them as an optimistic estimate.
+A mask mAP@50-95 of 42.3 % is modest: see *Known Limitations*.
 
 ![Validation tile predictions](models/Nano_3_960/val_batch0_pred.jpg)
+
+### Inventory output — 14,506 ha study area · 25 cm/px GSD
+
+The run below is an **inference output, not a validation**: there is no
+ground-truth stem count for these 14,506 ha, so the figures describe what the
+model produced, not how right it was. Accuracy is the table above.
+
+| Metric | Value |
+| :--- | :--- |
+| **Detected stems** | 357,185 |
+| **Tree density** | 24.62 stems/ha |
+| **Canopy Cover (FCC)** | 11.48 % |
+| **Mean crown diameter** | 7.35 m |
+| **Std dev (diameter)** | 2.30 m |
+| **Median crown diameter** | 7.16 m |
+| **Max crown diameter** | 18.88 m |
+
+The figures are internally consistent: 24.62 stems/ha at a 7.35 m mean crown
+diameter implies ~10.5 % cover, against the 11.48 % measured from the polygons.
+Given a mask recall of 70.9 %, the true stem count is very likely **higher** than
+357,185; treat it as a lower bound rather than a census.
 
 ---
 
@@ -155,7 +184,9 @@ Validation predictions on held-out tiles:
 - **Single class** — Detects one class (`Copa`). Does not distinguish species, health status, or age class.
 - **Dense canopy** — Heavy crown overlap may produce merged or missed detections.
 - **Model scale** — Uses the `Nano` variant (`yolo11n-seg`) for speed. Larger YOLO variants are expected to improve recall in structurally complex scenes.
-- **Low accuracy** - Performance metrics fall significantly below the expected baseline for a segmentation project. To achieve improvements, greater volume and variance in the training data are required.
+- **Low accuracy** — Performance metrics fall significantly below the expected baseline for a segmentation project. To achieve improvements, greater volume and variance in the training data are required.
+- **No independent test set** — Reported metrics come from the validation split used for model selection, so they are an optimistic estimate of performance on unseen data.
+- **No field validation** — The 14,506 ha inventory has never been checked against ground-truth stem counts or field plots. It is a model output, not a verified census.
 
 ---
 
@@ -171,15 +202,17 @@ Please open an issue or submit a pull request.
 
 ---
 ## Citation
-	
+
 If you use this work in your research, please cite:
 
-@software{herruzo2026Dehesa-Crown-Segmentation-YOLOv11,
-author  = {Herruzo, Juan Manuel},
-title   = {Dehesa-Crown-Segmentation-YOLOv11},
-year    = {2026},
-url     = {[https://github.com/Juanmaherruzo/Dehesa-Crown-Segmentation-YOLOv11](https://github.com/Juanmaherruzo/Dehesa-Crown-Segmentation-YOLOv11)}
+```bibtex
+@software{herruzo2026dehesacrowns,
+  author = {Herruzo, Juan Manuel},
+  title  = {Dehesa Tree Crown Segmentation (YOLOv11)},
+  year   = {2026},
+  url    = {https://github.com/Juanmaherruzo/Dehesa-Crown-Segmentation-YOLOv11}
 }
+```
 
 ---
 

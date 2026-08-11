@@ -1,14 +1,16 @@
-# Raster / vector data
+﻿# Raster / vector data
 *.tif
 *.tiff
 *.gpkg
 *.zip
 
-# Model weights
+# Model weights. best.pt is the exception: without it the repo is not runnable,
+# so it is tracked deliberately. Any other checkpoint stays out.
 *.pt
+!models/best.pt
 *.onnx
 
-# Training dataset (available on Roboflow — see README)
+# Training dataset (available on Roboflow â€” see README)
 Detector_Copas_yaml/
 
 # Python

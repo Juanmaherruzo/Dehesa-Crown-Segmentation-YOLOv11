@@ -52,6 +52,25 @@ class InventoryReporter:
         report.info("  Detected stems       : %d trees", len(gdf))
         report.info("  Density              : %.2f stems/ha", density)
         report.info("  Canopy Cover (FCC)   : %.2f %%", canopy_cover)
+
+        # Coverage is part of the result: a stem count from a run that dropped
+        # tiles is a lower bound, and the summary has to say so.
+        n_tiles = cast(int, raster_meta.get("n_tiles", 0))
+        tiles_failed = cast(int, raster_meta.get("tiles_failed", 0))
+        if n_tiles:
+            report.info(
+                "  Tiles processed      : %d/%d (%.2f %% complete)",
+                n_tiles - tiles_failed,
+                n_tiles,
+                100.0 * (n_tiles - tiles_failed) / n_tiles,
+            )
+        if tiles_failed:
+            report.info("-" * 50)
+            report.info(
+                "  WARNING: %d tiles failed. The counts above are a LOWER BOUND;",
+                tiles_failed,
+            )
+            report.info("  crowns inside those tiles are missing from this inventory.")
         report.info("-" * 50)
         report.info("  Mean crown diameter  : %.2f m", diameters.mean())
         report.info("  Std deviation (diam) : %.2f m", diameters.std())
